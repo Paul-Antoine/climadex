@@ -1,0 +1,32 @@
+{
+  "name": "backend",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "backend/src",
+  "projectType": "application",
+  "targets": {
+    "start": {
+      "command": "cd backend/src && tsx ./index.ts"
+    },
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "platform": "node",
+        "outputPath": "dist/backend/",
+        "format": ["cjs"],
+        "thirdParty": true,
+        "bundle": true,
+        "main": "backend/src/index.ts",
+        "tsConfig": "backend/tsconfig.json",
+        "generatePackageJson": false,
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      }
+    }
+  },
+  "tags": ["scope:backend"]
+}

@@ -1,0 +1,26 @@
+#header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#header a {
+  background-color: rgb(44, 112, 62);
+  appearance: none;
+  user-select: none;
+  cursor: pointer;
+  text-decoration: none;
+  text-transform: none;
+  font-weight: bold;
+  color: rgb(255, 255, 255);
+  border-radius: 100vh;
+  border: 1px solid;
+  padding: 6px 16px;
+  min-width: 32px;
+  line-height: 1.75;
+}
+
+#header a:hover {
+  text-decoration: none;
+}
+

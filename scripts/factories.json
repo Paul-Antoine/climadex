@@ -1,0 +1,298 @@
+[
+    {
+        "factory_name": "Titan Works",
+        "country": "Great Britain",
+        "address": "Swindon Rd, Swindon SN3 3SG",
+        "latitude": 51.5777206,
+        "longitude": -1.7530268,
+        "yearly_revenue": 1000000
+      },
+      {
+        "factory_name": "Vector Manufacturing",
+        "country": "Belgium",
+        "address": "Bd Hector Grosjean 6-28, 4840 Welkenraedt",
+        "latitude": 50.6589503,
+        "longitude": 5.9731663,
+        "yearly_revenue": 2500000
+      },
+      {
+        "factory_name": "Pinnacle Industries",
+        "country": "France",
+        "address": "359-319 Rue Pierre Dupuy, 62231 Sangatte",
+        "latitude": 50.9458218,
+        "longitude": 1.7544388,
+        "yearly_revenue": 100000
+      },
+      {
+        "factory_name": "Vortex Systems",
+        "country": "Belgium",
+        "address": "Scheldedijk 30, 2070 Zwijndrecht",
+        "latitude": 51.2484071,
+        "longitude": 4.3116306,
+        "yearly_revenue": 3250000
+      },
+      {
+        "factory_name": "Prime Forge",
+        "country": "Germany",
+        "address": "Zunftstraße 5, 76227 Karlsruhe",
+        "latitude": 49.0000431,
+        "longitude": 8.471426,
+        "yearly_revenue": 10000000
+      },
+      {
+        "factory_name": "Nimbus Fabrication",
+        "country": "USA",
+        "address": "210 Waverley St, Palo Alto, CA 94301, USA",
+        "latitude": 37.4492024,
+        "longitude": -122.1640526,
+        "yearly_revenue": 22300000
+      },
+      {
+        "factory_name": "Everest Engineering",
+        "country": "Germany",
+        "address": "Wallnerstraße 21, 80939 München",
+        "latitude": 47.734096,
+        "longitude": 11.6353155,
+        "yearly_revenue": 10000000
+      },
+      {
+        "factory_name": "Quasar Corp",
+        "country": "France",
+        "address": "2 rue Saint-Honoré, 75001, Paris",
+        "latitude": 48.8609477,
+        "longitude": 2.3408811,
+        "yearly_revenue": 9000000
+      },
+      {
+        "factory_name": "Zenith Foundry",
+        "country": "Spain",
+        "address": "Calle Ctra. la Curva, 17-24, 04770 Adra, Almería",
+        "latitude": 36.7586059,
+        "longitude": -2.9799463,
+        "yearly_revenue": 1000000
+      },
+      {
+        "factory_name": "Atlas Dynamics",
+        "country": "France",
+        "address": "Mufti Sayem Rd, Brahmanbaria, Bangladesh",
+        "latitude": 23.9452511,
+        "longitude": 91.1175632,
+        "yearly_revenue": 3000000
+      },
+      {
+        "factory_name": "Titan Works",
+        "country": "Turkey",
+        "address": "123 Ankara Street, Ankara",
+        "latitude": 40.203153,
+        "longitude": 29.053345,
+        "yearly_revenue": 1500000
+      },
+      {
+        "factory_name": "Pinnacle Industries",
+        "country": "Turkey",
+        "address": "456 Izmir Avenue, Izmir",
+        "latitude": 37.824417,
+        "longitude": 27.844849,
+        "yearly_revenue": 2300000
+      },
+      {
+        "factory_name": "Everest Manufacturing",
+        "country": "Syria",
+        "address": "789 Aleppo Road, Aleppo",
+        "latitude": 35.442002,
+        "longitude": 41.693115,
+        "yearly_revenue": 900000
+      },
+      {
+        "factory_name": "Golden Horizon",
+        "country": "Lebanon",
+        "address": "321 Beirut Boulevard, Beirut",
+        "latitude": 33.851622,
+        "longitude": 35.620422,
+        "yearly_revenue": 1250000
+      },
+      {
+        "factory_name": "Atlas Foundry",
+        "country": "Morocco",
+        "address": "654 Rabat Street, Rabat",
+        "latitude": 33.935584,
+        "longitude": -6.547852,
+        "yearly_revenue": 1100000
+      },
+      {
+        "factory_name": "Mediterranean Metals",
+        "country": "Algeria",
+        "address": "987 Algiers Avenue, Algiers",
+        "latitude": 36.521205,
+        "longitude": 3.295898,
+        "yearly_revenue": 2000000
+      },
+      {
+        "factory_name": "Pyramid Fabrication",
+        "country": "Egypt",
+        "address": "123 Cairo Road, Cairo",
+        "latitude": 30.703581,
+        "longitude": 30.146484,
+        "yearly_revenue": 1750000
+      },
+      {
+        "factory_name": "Yemeni Textiles",
+        "country": "Yemen",
+        "address": "456 Sana'a Street, Sana'a",
+        "latitude": 14.844527,
+        "longitude": 44.780273,
+        "yearly_revenue": 800000
+      },
+      {
+        "factory_name": "Indian Steelworks",
+        "country": "India",
+        "address": "789 New Delhi Avenue, New Delhi",
+        "latitude": 28.453905,
+        "longitude": 76.860352,
+        "yearly_revenue": 2200000
+      },
+      {
+        "factory_name": "Jaipur Machinery",
+        "country": "India",
+        "address": "321 Jaipur Road, Jaipur",
+        "latitude": 26.50357,
+        "longitude": 75.761719,
+        "yearly_revenue": 1400000
+      },
+      {
+        "factory_name": "Burmese Manufacturing",
+        "country": "Myanmar",
+        "address": "654 Yangon Street, Yangon",
+        "latitude": 16.663727,
+        "longitude": 96.064453,
+        "yearly_revenue": 950000
+      },
+      {
+        "factory_name": "Taiwan Precision",
+        "country": "Taiwan",
+        "address": "987 Taipei Avenue, Taipei",
+        "latitude": 24.597618,
+        "longitude": 121.464844,
+        "yearly_revenue": 2100000
+      },
+      {
+        "factory_name": "Philippine Plastics",
+        "country": "Philippines",
+        "address": "123 Manila Road, Manila",
+        "latitude": 14.759095,
+        "longitude": 120.893555,
+        "yearly_revenue": 1200000
+      },
+      {
+        "factory_name": "Malaysian Metals",
+        "country": "Malaysia",
+        "address": "456 Kuala Lumpur Street, Kuala Lumpur",
+        "latitude": 2.7985,
+        "longitude": 102.392578,
+        "yearly_revenue": 1350000
+      },
+      {
+        "factory_name": "Cambodian Crafts",
+        "country": "Cambodia",
+        "address": "789 Phnom Penh Avenue, Phnom Penh",
+        "latitude": 11.170454,
+        "longitude": 105.776367,
+        "yearly_revenue": 850000
+      },
+      {
+        "factory_name": "Brazilian Works",
+        "country": "Brazil",
+        "address": "321 Rio de Janeiro Road, Rio de Janeiro",
+        "latitude": -22.769626,
+        "longitude": -42.901611,
+        "yearly_revenue": 2000000
+      },
+      {
+        "factory_name": "Andean Industries",
+        "country": "Peru",
+        "address": "654 Lima Street, Lima",
+        "latitude": -17.149794,
+        "longitude": -71.279297,
+        "yearly_revenue": 950000
+      },
+      {
+        "factory_name": "Amazonian Engineering",
+        "country": "Colombia",
+        "address": "987 Bogota Avenue, Bogota",
+        "latitude": 3.504862,
+        "longitude": -72.773438,
+        "yearly_revenue": 1300000
+      },
+      {
+        "factory_name": "El Salvador Works",
+        "country": "El Salvador",
+        "address": "123 San Salvador Road, San Salvador",
+        "latitude": 13.704732,
+        "longitude": -89.121094,
+        "yearly_revenue": 850000
+      },
+      {
+        "factory_name": "Mexican Metals",
+        "country": "Mexico",
+        "address": "456 Mexico City Street, Mexico City",
+        "latitude": 19.472015,
+        "longitude": -99.228516,
+        "yearly_revenue": 1500000
+      },
+      {
+        "factory_name": "Southern Foundries",
+        "country": "United States",
+        "address": "789 Atlanta Road, Atlanta, GA",
+        "latitude": 33.613664,
+        "longitude": -84.331055,
+        "yearly_revenue": 2400000
+      },
+      {
+        "factory_name": "California Plastics",
+        "country": "United States",
+        "address": "321 Mountain View Street, Mountain View, CA",
+        "latitude": 37.406262,
+        "longitude": -122.036133,
+        "yearly_revenue": 3500000
+      },
+      {
+        "factory_name": "Oregon Foundry",
+        "country": "United States",
+        "address": "654 Portland Avenue, Portland, OR",
+        "latitude": 45.496292,
+        "longitude": -122.695313,
+        "yearly_revenue": 2000000
+      },
+      {
+        "factory_name": "Baja Manufacturing",
+        "country": "Mexico",
+        "address": "987 La Paz Road, La Paz",
+        "latitude": 27.328041,
+        "longitude": -113.774414,
+        "yearly_revenue": 1300000
+      },
+      {
+        "factory_name": "Illinois Industries",
+        "country": "United States",
+        "address": "123 Chicago Road, Chicago, IL",
+        "latitude": 41.774825,
+        "longitude": -87.84668,
+        "yearly_revenue": 2200000
+      },
+      {
+        "factory_name": "Ottawa Engineering",
+        "country": "Canada",
+        "address": "456 Ottawa Avenue, Ottawa",
+        "latitude": 45.218219,
+        "longitude": -75.410156,
+        "yearly_revenue": 1900000
+      },
+      {
+        "factory_name": "Libyan Works",
+        "country": "Libya",
+        "address": "789 Tripoli Road, Tripoli",
+        "latitude": 32.725183,
+        "longitude": 13.205566,
+        "yearly_revenue": 1200000
+      }
+]

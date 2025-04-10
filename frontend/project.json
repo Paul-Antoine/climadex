@@ -1,0 +1,13 @@
+{
+  "name": "frontend",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "includedScripts": [],
+  "sourceRoot": "frontend/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "start": {
+      "command": "nx serve"
+    }
+  }
+}

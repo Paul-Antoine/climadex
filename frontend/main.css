@@ -1,0 +1,17 @@
+* {
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+}
+
+#main {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+a,
+a:visited {
+  text-decoration: none;
+  color: rgb(17, 0, 166);
+}

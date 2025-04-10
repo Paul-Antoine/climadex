@@ -1,0 +1,33 @@
+table {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0px;
+}
+
+thead {
+  display: table-header-group;
+}
+
+tr {
+  display: table-row;
+  vertical-align: middle;
+  outline: 0;
+  background-color: rgb(242, 242, 242);
+}
+
+th {
+  padding: 8px 0;
+  text-align: left;
+  background-color: rgb(44, 112, 62);
+  color: rgb(255, 255, 255);
+}
+
+td {
+  padding: 8px 0;
+}
+
+th:nth-of-type(1),
+td:nth-of-type(1) {
+  padding: 8px;
+}
