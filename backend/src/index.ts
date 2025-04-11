@@ -40,6 +40,22 @@ app.get('/', (c) => {
   );
 });
 
+function getTemperatureRisk(factory: IDbFactory) : IFactory['temperatureRisk'] {
+  const temperature = getMeanTemperatureWarmestQuarter({
+    latitude: factory.latitude,
+    longitude: factory.longitude,
+    timeframe: '2030', // Example timeframe, can be dynamic
+  });
+
+  let temperatureRisk: IFactory['temperatureRisk'] = 'Undefined';
+  if (temperature !== null) {
+    temperatureRisk = temperature > 30 ? 'High' : 'Low'; // todo : example to compute risk, to improve
+  }
+
+  //console.log(`Factory: ${factory.factory_name}, Temperature: ${temperature}`);
+  return temperatureRisk;
+}
+
 app.get('/factories', async (c: Context) => {
   const client = await dbClientPromise;
 
@@ -54,14 +70,19 @@ app.get('/factories', async (c: Context) => {
 
   return c.json(
     factories.map(
-      (factory: IDbFactory): IFactory => ({
-        factoryName: factory.factory_name,
-        address: factory.address,
-        country: factory.country,
-        latitude: factory.latitude,
-        longitude: factory.longitude,
-        yearlyRevenue: factory.yearly_revenue,
-      })
+      (factory: IDbFactory): IFactory => {
+     
+        return {
+          id: factory.id,
+          factoryName: factory.factory_name,
+          address: factory.address,
+          country: factory.country,
+          latitude: factory.latitude,
+          longitude: factory.longitude,
+          yearlyRevenue: factory.yearly_revenue,
+          temperatureRisk : getTemperatureRisk(factory),
+        };
+      }
     )
   );
 });

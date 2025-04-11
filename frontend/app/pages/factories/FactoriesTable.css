@@ -31,3 +31,18 @@ th:nth-of-type(1),
 td:nth-of-type(1) {
   padding: 8px;
 }
+
+.risk-high {
+  color: red;
+  font-weight: bold;
+}
+
+.risk-low {
+  color: green;
+  font-weight: bold;
+}
+
+.risk-undefined {
+  color: gray;
+  font-style: italic;
+}

@@ -39,6 +39,7 @@ export function FactoriesTable({ filterString }: { filterString: string }) {
           <th>Latitude</th>
           <th>Longitude</th>
           <th>Yearly Revenue</th>
+          <th>Temperature Risk</th>
         </tr>
       </thead>
       <tbody>{factories?.map(FactoryRow)}</tbody>
