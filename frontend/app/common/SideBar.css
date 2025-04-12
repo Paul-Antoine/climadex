@@ -1,8 +1,11 @@
 #sidebar {
   top: 0;
-  width: 40px;
+  width: 64px;
   min-height: 100vh;
   padding: 12px;
+  box-sizing: border-box; /* include padding in compute size to avoid scrollbar*/
+
   text-align: center;
   background-color: rgb(44, 112, 62);
+  
 }

@@ -5,11 +5,7 @@ import './FactoriesTable.css';
 import { IFactory } from '@climadex/types';
 import { FactoryRow } from './FactoryRow';
 
-async function fetchFactories({
-  filterString,
-}: {
-  filterString: string;
-}): Promise<IFactory[]> {
+async function fetchFactories({ filterString }: { filterString: string }): Promise<IFactory[]> {
   const url =
     filterString === ''
       ? 'http://localhost:3000/factories'

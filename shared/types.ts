@@ -6,5 +6,5 @@ export interface IFactory {
     latitude: number;
     longitude: number;
     yearlyRevenue: number;
-    temperatureRisk: "Low" | "High" | "Undefined";
+    temperatureRisk?: "Low" | "High" | "Undefined";
 }

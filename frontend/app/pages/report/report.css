@@ -1,0 +1,11 @@
+.report {
+  display: flex;
+  flex-direction: column; /* Par défaut, les éléments sont empilés */
+  gap: 30px;
+}
+
+@media (min-width: 1000px) {
+  .report {
+    flex-direction: row; /* Lorsque la largeur de l'écran est supérieure à 500px, les éléments sont côte à côte */
+  }
+}

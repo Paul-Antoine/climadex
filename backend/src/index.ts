@@ -56,6 +56,48 @@ function getTemperatureRisk(factory: IDbFactory) : IFactory['temperatureRisk'] {
   return temperatureRisk;
 }
 
+app.get('/factory/:id', async (c: Context) => {
+  const client = await dbClientPromise;
+  const id = c.req.param('id');
+  const factory = await client.get(`SELECT * FROM factories WHERE id = ?;`, [id]);
+  if (!factory) {
+    return c.text(`Factory ${id} not found.`, 404);
+  }
+  return c.json({
+    id: factory.id,
+    factoryName: factory.factory_name,
+    address: factory.address,
+    country: factory.country,
+    latitude: factory.latitude,
+    longitude: factory.longitude,
+    yearlyRevenue: factory.yearly_revenue,
+    temperatureRisk: getTemperatureRisk(factory),
+  });
+});
+
+app.get('/factory/:id/temperature', async (c: Context) => {
+  const client = await dbClientPromise;
+  const id = c.req.param('id');
+
+  // Récupérer les informations de l'usine depuis la base de données
+  const factory = await client.get(`SELECT * FROM factories WHERE id = ?;`, [id]);
+  if (!factory) {
+    return c.text(`Factory ${id} not found.`, 404);
+  }
+
+  // Calculer les températures pour chaque période
+  const temperatures = TIMEFRAMES.map((timeframe) => {
+    const temperature = getMeanTemperatureWarmestQuarter({
+      latitude: factory.latitude,
+      longitude: factory.longitude,
+      timeframe,
+    });
+    return { [timeframe]: `${temperature}°C` };
+  });
+
+  return c.json(temperatures);
+});
+
 app.get('/factories', async (c: Context) => {
   const client = await dbClientPromise;
 
