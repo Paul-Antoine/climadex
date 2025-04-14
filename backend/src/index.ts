@@ -40,19 +40,31 @@ app.get('/', (c) => {
   );
 });
 
+// Function to compute the temperature risk based on the factory's latitude and longitude
+// Base on the mean temperature for the warmest quarter, the risk is High:
+// - if the temperature > 30°C, critical temperature threshold
+// - and the temperature rising > 2°C, capacity of the factory to adapt to climate change
+const criticalTemperatureThreshold = 30;
+const criticalTemperatureRising = 2;
 function getTemperatureRisk(factory: IDbFactory) : IFactory['temperatureRisk'] {
-  const temperature = getMeanTemperatureWarmestQuarter({
-    latitude: factory.latitude,
-    longitude: factory.longitude,
-    timeframe: '2030', // Example timeframe, can be dynamic
-  });
-
-  let temperatureRisk: IFactory['temperatureRisk'] = 'Undefined';
-  if (temperature !== null) {
-    temperatureRisk = temperature > 30 ? 'High' : 'Low'; // todo : example to compute risk, to improve
+  const temperatures = [];
+  for (const timeframe of TIMEFRAMES) {
+    temperatures.push(getMeanTemperatureWarmestQuarter({
+      latitude: factory.latitude,
+      longitude: factory.longitude,
+      timeframe: timeframe,
+    }));
   }
 
-  //console.log(`Factory: ${factory.factory_name}, Temperature: ${temperature}`);
+  const temperature2030 = temperatures[0];
+  const temperature2090 = temperatures[3];
+
+  let temperatureRisk: IFactory['temperatureRisk'] = 'Undefined';
+  if (temperature2030 && temperature2090) {
+    const risingTemperature = temperature2090 - temperature2030;
+    temperatureRisk = temperature2030 > criticalTemperatureThreshold && risingTemperature > criticalTemperatureRising ? 'High' : 'Low';
+  }
+
   return temperatureRisk;
 }
 
@@ -85,14 +97,14 @@ app.get('/factory/:id/temperature', async (c: Context) => {
     return c.text(`Factory ${id} not found.`, 404);
   }
 
-  // Calculer les températures pour chaque période
   const temperatures = TIMEFRAMES.map((timeframe) => {
     const temperature = getMeanTemperatureWarmestQuarter({
       latitude: factory.latitude,
       longitude: factory.longitude,
       timeframe,
     });
-    return { [timeframe]: `${temperature}°C` };
+
+    return {year: timeframe, temperature: temperature};
   });
 
   return c.json(temperatures);

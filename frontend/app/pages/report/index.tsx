@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { IFactory } from '@climadex/types';
 import { FactoryInfos } from './FactoryInfos';
 import { FactoryTemperatures } from './FactoryTemperatures';
-import './report.css';
+import './Report.css';
 
 async function fetchFactoryInfos( factoryId: number ): Promise<IFactory> {
   const response = await fetch(`http://localhost:3000/factory/${factoryId}`);

@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { FactoriesTable } from './FactoriesTable';
+import debounce from 'lodash.debounce';
 
 import './index.css';
 import { Link } from 'react-router-dom';
 
 export function FactoriesPage() {
   const [filterString, setFilterString] = useState('');
+  const debouncedSetFilterString = debounce(setFilterString, 400); // laggy search fix
 
   return (
     <div id="main">
@@ -15,7 +17,7 @@ export function FactoriesPage() {
       </div>
       <label>Search <input
         type="text"
-        onChange={(e) => setFilterString(`${e.target.value}`)}
+        onChange={(e) => debouncedSetFilterString(e.target.value)}
       /></label>
       <FactoriesTable filterString={filterString} />
     </div>

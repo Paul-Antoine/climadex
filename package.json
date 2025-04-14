@@ -4,6 +4,8 @@
   "license": "MIT",
   "scripts": {
     "start": "nx run-many --all --target=start",
+    "start-frontend": "nx run frontend:start",
+    "start-backend": "nx run backend:start",
     "build": "nx build",
     "test": "nx test"
   },
@@ -11,6 +13,7 @@
   "dependencies": {
     "@hono/node-server": "^1.12.1",
     "gdal-async": "^3.9.2",
+    "lodash.debounce": "^4.0.8",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-hook-form": "^7.53.0",

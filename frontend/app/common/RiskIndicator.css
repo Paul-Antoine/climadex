@@ -1,0 +1,15 @@
+.risk-high {
+    color: red;
+    font-weight: bold;
+  }
+  
+  .risk-low {
+    color: green;
+    font-weight: bold;
+  }
+  
+  .risk-undefined {
+    color: gray;
+    font-style: italic;
+  }
+  

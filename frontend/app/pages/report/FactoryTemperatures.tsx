@@ -1,25 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { IFactory } from '@climadex/types';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+
+interface ITemperatureData {
+  year: number; 
+  temperature: number;
+};
 
 export const FactoryTemperatures = ({ factory }: { factory: IFactory }) => {
-  const [temperatureData, setTemperatureData] = useState<{ year: number; temperature: number }[]>([]);
+  const [temperatureData, setTemperatureData] = useState<ITemperatureData[]>([]);
 
   useEffect(() => {
-    // Fetch temperature data from the backend
     const fetchTemperatureData = async () => {
       try {
         const response = await fetch(`http://localhost:3000/factory/${factory.id}/temperature`);
         const data = await response.json();
-
-        // Transform the data into the format required by Recharts
-        const formattedData = data.map((entry: Record<string, string>) => {
-          const year = parseInt(Object.keys(entry)[0], 10);
-          const temperature = parseFloat(entry[year].replace('°C', ''));
-          return { year, temperature };
-        });
-
-        setTemperatureData(formattedData);
+        setTemperatureData(data);
       } catch (error) {
         console.error('Error fetching temperature data:', error);
       }
@@ -33,14 +29,28 @@ export const FactoryTemperatures = ({ factory }: { factory: IFactory }) => {
   return (
     <div>
       <h2>Temperatures</h2>
-      <LineChart width={400} height={400} data={temperatureData}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="year" label={{ value: 'Year', position: 'insideBottomRight', offset: -5 }} />
-          <YAxis label={{ value: 'Temperature (°C)', angle: -90, position: 'insideLeft' }} />
-          <Tooltip />
-          <Legend />
-          <Line type="monotone" dataKey="temperature" stroke="#8884d8" activeDot={{ r: 8 }} />
-        </LineChart>
+        {checkTemperatureAvailability(temperatureData) ? (
+          <LineChart width={400} height={400} data={temperatureData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="year" label={{ value: 'Year', position: 'insideBottomRight', offset: -5 }} />
+            <YAxis label={{ value: 'Temperature (°C)', angle: -90, position: 'insideLeft' }} />
+            <Tooltip />
+            <Legend />
+            <Line type="monotone" dataKey="temperature" stroke="#8884d8" activeDot={{ r: 8 }} />
+          </LineChart>
+        ) : (
+          <p>Data not available</p>
+        )}
     </div>
   );
 };
+
+function checkTemperatureAvailability(temperatureData: ITemperatureData[]) : boolean {
+  if (!temperatureData || temperatureData.length === 0) {
+    return false;
+  }
+
+  const filteredData = temperatureData.filter((data) => !!data.temperature);
+  
+  return filteredData.length > 0;
+}
