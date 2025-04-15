@@ -4,7 +4,7 @@ import { cors } from 'hono/cors';
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
 
-import { IFactory } from '@climadex/types';
+import { IFactory, IFactoriesPage } from '@climadex/types';
 import { IDbFactory } from './types';
 
 import { getMeanTemperatureWarmestQuarter, TIMEFRAMES } from './indicators';
@@ -42,9 +42,9 @@ app.get('/', (c) => {
 
 // Function to compute the temperature risk based on the factory's latitude and longitude
 // Base on the mean temperature for the warmest quarter, the risk is High:
-// - if the temperature > 30°C, critical temperature threshold
-// - and the temperature rising > 2°C, capacity of the factory to adapt to climate change
-const criticalTemperatureThreshold = 30;
+// - if the temperature > 28°C (critical temperature threshold)
+// - and the temperature rising > 2°C (capacity of the factory to adapt to climate change)
+const criticalTemperatureThreshold = 28;
 const criticalTemperatureRising = 2;
 function getTemperatureRisk(factory: IDbFactory) : IFactory['temperatureRisk'] {
   const temperatures = [];
@@ -114,18 +114,27 @@ app.get('/factories', async (c: Context) => {
   const client = await dbClientPromise;
 
   const query = c.req.query('q');
+  const page = parseInt(c.req.query('page') || '1', 10);
+  const pageSize = parseInt(c.req.query('pageSize') || '20', 10);
+
+  const offset = (page - 1) * pageSize;
+  const limit = pageSize + 1; // fetch one more to check if there are more results
 
   const factories = query
     ? await client.all(
-        `SELECT * FROM factories WHERE LOWER( factory_name ) LIKE ?;`,
-        [`%${query.toLowerCase()}%`]
+        `SELECT * FROM factories WHERE LOWER( factory_name ) LIKE ? LIMIT ? OFFSET ?;`,
+        [`%${query.toLowerCase()}%`, limit, offset]
       )
-    : await client.all('SELECT * FROM factories');
+    : await client.all(
+        `SELECT * FROM factories LIMIT ? OFFSET ?;`,
+        [limit, offset]
+      );
 
-  return c.json(
-    factories.map(
+  const hasMore = factories.length > pageSize;
+
+  const response : IFactoriesPage = {
+    factories: factories.map(
       (factory: IDbFactory): IFactory => {
-     
         return {
           id: factory.id,
           factoryName: factory.factory_name,
@@ -134,11 +143,14 @@ app.get('/factories', async (c: Context) => {
           latitude: factory.latitude,
           longitude: factory.longitude,
           yearlyRevenue: factory.yearly_revenue,
-          temperatureRisk : getTemperatureRisk(factory),
+          temperatureRisk: getTemperatureRisk(factory),
         };
       }
-    )
-  );
+    ),
+    hasMore
+  };
+
+  return c.json(response);
 });
 
 app.post('/factories', async (c: Context) => {

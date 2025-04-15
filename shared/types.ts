@@ -8,3 +8,8 @@ export interface IFactory {
     yearlyRevenue: number;
     temperatureRisk?: "Low" | "High" | "Undefined";
 }
+
+export interface IFactoriesPage {
+    factories: IFactory[];
+    hasMore: boolean;
+}
