@@ -40,18 +40,18 @@ app.get('/', (c) => {
   );
 });
 
-// Function to compute the temperature risk based on the factory's latitude and longitude
-// Base on the mean temperature for the warmest quarter, the risk is High:
+// Function to compute the temperature risk based on the mean temperature for the warmest quarter
+// The risk is High:
 // - if the temperature > 28°C (critical temperature threshold)
 // - and the temperature rising > 2°C (capacity of the factory to adapt to climate change)
 const criticalTemperatureThreshold = 28;
 const criticalTemperatureRising = 2;
-function getTemperatureRisk(factory: IDbFactory) : IFactory['temperatureRisk'] {
+function getTemperatureRisk(latitude: number, longitude: number) : IFactory['temperatureRisk'] {
   const temperatures = [];
   for (const timeframe of TIMEFRAMES) {
     temperatures.push(getMeanTemperatureWarmestQuarter({
-      latitude: factory.latitude,
-      longitude: factory.longitude,
+      latitude: latitude,
+      longitude: longitude,
       timeframe: timeframe,
     }));
   }
@@ -83,10 +83,11 @@ app.get('/factory/:id', async (c: Context) => {
     latitude: factory.latitude,
     longitude: factory.longitude,
     yearlyRevenue: factory.yearly_revenue,
-    temperatureRisk: getTemperatureRisk(factory),
+    temperatureRisk: factory.temperature_risk
   });
 });
 
+// Get the temperature for a specific factory
 app.get('/factory/:id/temperature', async (c: Context) => {
   const client = await dbClientPromise;
   const id = c.req.param('id');
@@ -143,7 +144,7 @@ app.get('/factories', async (c: Context) => {
           latitude: factory.latitude,
           longitude: factory.longitude,
           yearlyRevenue: factory.yearly_revenue,
-          temperatureRisk: getTemperatureRisk(factory),
+          temperatureRisk: factory.temperature_risk
         };
       }
     ),
@@ -153,6 +154,7 @@ app.get('/factories', async (c: Context) => {
   return c.json(response);
 });
 
+// create a new factory
 app.post('/factories', async (c: Context) => {
   const client = await dbClientPromise;
 
@@ -169,20 +171,53 @@ app.post('/factories', async (c: Context) => {
     latitude: +latitude,
     longitude: +longitude,
     yearlyRevenue: +yearlyRevenue,
+    temperatureRisk: getTemperatureRisk(+latitude, +longitude),
   };
 
   await client.run(
-    `INSERT INTO factories (factory_name, address, country, latitude, longitude, yearly_revenue)
-VALUES (?, ?, ?, ?, ?, ?);`,
+    `INSERT INTO factories (factory_name, address, country, latitude, longitude, yearly_revenue, temperature_risk)
+VALUES (?, ?, ?, ?, ?, ?, ?);`,
     factory.factoryName,
     factory.address,
     factory.country,
     factory.latitude,
     factory.longitude,
-    factory.yearlyRevenue
+    factory.yearlyRevenue,
+    factory.temperatureRisk
   );
 
   return c.json({ result: 'OK' });
+});
+
+// update the temperature risk for all factories
+app.patch('/factories/temperature-risk', async (c: Context) => {
+  const client = await dbClientPromise;
+  console.log('Updating temperature risk for all factories');
+
+  const columnCheck = await client.all(
+    `PRAGMA table_info(factories);`
+  );
+
+  const columnExists = columnCheck.some((column: any) => column.name === 'temperature_risk');
+
+  if (!columnExists) {
+    console.log('=> adding temperature_risk column to factories table');
+    await client.run(`ALTER TABLE factories ADD COLUMN temperature_risk TEXT;`);
+  }
+
+  const factories = await client.all(`SELECT * FROM factories;`);
+
+  for (const factory of factories) {
+    const temperatureRisk = getTemperatureRisk(factory.latitude, factory.longitude);
+    await client.run(
+      `UPDATE factories SET temperature_risk = ? WHERE id = ?;`,
+      [temperatureRisk, factory.id]
+    );
+  }
+
+  const resultMessage = `Temperature risk updated for ${factories.length} factories.`;
+  console.log("=> " + resultMessage);
+  return c.json({ result: resultMessage });
 });
 
 serve(app);
