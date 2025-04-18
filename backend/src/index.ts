@@ -4,7 +4,7 @@ import { cors } from 'hono/cors';
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
 
-import { IFactory, IFactoriesPage } from '@climadex/types';
+import { IFactory, IFactoriesPage, ITemperature } from '@climadex/types';
 import { IDbFactory } from './types';
 
 import { getMeanTemperatureWarmestQuarter, TIMEFRAMES } from './indicators';
@@ -17,28 +17,6 @@ const dbClientPromise = open({
 });
 
 app.use('/*', cors());
-
-app.get('/', (c) => {
-  // Here is an example of how to read temperatures previsions from the dataset
-
-  const values = [];
-
-  for (const timeframe of TIMEFRAMES) {
-    values.push({
-      [timeframe]: `${getMeanTemperatureWarmestQuarter({
-        latitude: 48.8711312,
-        longitude: 2.3462203,
-        timeframe: timeframe,
-      })}°C`,
-    });
-  }
-
-  return c.text(
-    `Example evolution of temperatures over timeframes : ${JSON.stringify(
-      values
-    )}`
-  );
-});
 
 // Function to compute the temperature risk based on the mean temperature for the warmest quarter
 // The risk is High:
@@ -68,23 +46,27 @@ function getTemperatureRisk(latitude: number, longitude: number) : IFactory['tem
   return temperatureRisk;
 }
 
+// Get a specific factory by ID
 app.get('/factory/:id', async (c: Context) => {
   const client = await dbClientPromise;
   const id = c.req.param('id');
-  const factory = await client.get(`SELECT * FROM factories WHERE id = ?;`, [id]);
-  if (!factory) {
+  const factoryData = await client.get(`SELECT * FROM factories WHERE id = ?;`, [id]);
+  if (!factoryData) {
     return c.text(`Factory ${id} not found.`, 404);
   }
-  return c.json({
-    id: factory.id,
-    factoryName: factory.factory_name,
-    address: factory.address,
-    country: factory.country,
-    latitude: factory.latitude,
-    longitude: factory.longitude,
-    yearlyRevenue: factory.yearly_revenue,
-    temperatureRisk: factory.temperature_risk
-  });
+
+  const factory : IFactory = {
+    id: factoryData.id,
+    factoryName: factoryData.factory_name,
+    address: factoryData.address,
+    country: factoryData.country,
+    latitude: factoryData.latitude,
+    longitude: factoryData.longitude,
+    yearlyRevenue: factoryData.yearly_revenue,
+    temperatureRisk: factoryData.temperature_risk
+  };
+
+  return c.json(factory);
 });
 
 // Get the temperature for a specific factory
@@ -92,62 +74,75 @@ app.get('/factory/:id/temperature', async (c: Context) => {
   const client = await dbClientPromise;
   const id = c.req.param('id');
 
-  // Récupérer les informations de l'usine depuis la base de données
   const factory = await client.get(`SELECT * FROM factories WHERE id = ?;`, [id]);
   if (!factory) {
     return c.text(`Factory ${id} not found.`, 404);
   }
 
-  const temperatures = TIMEFRAMES.map((timeframe) => {
+  const temperatures: ITemperature[] = TIMEFRAMES.map((timeframe) => {
     const temperature = getMeanTemperatureWarmestQuarter({
       latitude: factory.latitude,
       longitude: factory.longitude,
       timeframe,
     });
 
-    return {year: timeframe, temperature: temperature};
+    return { year: timeframe, temperature: temperature };
   });
 
   return c.json(temperatures);
 });
 
+// Get all factories with pagination, search, and temperature risk filter
 app.get('/factories', async (c: Context) => {
   const client = await dbClientPromise;
 
   const query = c.req.query('q');
+  const temperatureRisk = c.req.query('risk');
   const page = parseInt(c.req.query('page') || '1', 10);
   const pageSize = parseInt(c.req.query('pageSize') || '20', 10);
 
   const offset = (page - 1) * pageSize;
   const limit = pageSize + 1; // fetch one more to check if there are more results
 
-  const factories = query
-    ? await client.all(
-        `SELECT * FROM factories WHERE LOWER( factory_name ) LIKE ? LIMIT ? OFFSET ?;`,
-        [`%${query.toLowerCase()}%`, limit, offset]
-      )
-    : await client.all(
-        `SELECT * FROM factories LIMIT ? OFFSET ?;`,
-        [limit, offset]
-      );
+  let sql = `SELECT * FROM factories`;
+  const params: any[] = [];
 
+  // Add filters for search and temperature risk
+  if (query || temperatureRisk) {
+    sql += ` WHERE`;
+    
+    if (query) {
+      sql += ` LOWER(factory_name) LIKE ?`;
+      params.push(`%${query.toLowerCase()}%`);
+    }
+
+    if (temperatureRisk) {
+      if (query) sql += ` AND`;
+      sql += ` temperature_risk = ?`;
+      params.push(temperatureRisk);
+    }
+  }
+
+  sql += ` LIMIT ? OFFSET ?;`;
+  params.push(limit, offset);
+
+  const factories = await client.all(sql, params);
   const hasMore = factories.length > pageSize;
-
   const response : IFactoriesPage = {
     factories: factories.map(
-      (factory: IDbFactory): IFactory => {
-        return {
-          id: factory.id,
-          factoryName: factory.factory_name,
-          address: factory.address,
-          country: factory.country,
-          latitude: factory.latitude,
-          longitude: factory.longitude,
-          yearlyRevenue: factory.yearly_revenue,
-          temperatureRisk: factory.temperature_risk
-        };
-      }
-    ),
+(factory: IDbFactory): IFactory => {
+      return {
+        id: factory.id,
+        factoryName: factory.factory_name,
+        address: factory.address,
+        country: factory.country,
+        latitude: factory.latitude,
+        longitude: factory.longitude,
+        yearlyRevenue: factory.yearly_revenue,
+        temperatureRisk: factory.temperature_risk
+      };
+    }
+),
     hasMore
   };
 

@@ -1,14 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { IFactory } from '@climadex/types';
+import { IFactory, ITemperature } from '@climadex/types';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
-interface ITemperatureData {
-  year: number; 
-  temperature: number;
-};
-
 export const FactoryTemperatures = ({ factory }: { factory: IFactory }) => {
-  const [temperatureData, setTemperatureData] = useState<ITemperatureData[]>([]);
+  const [temperatureData, setTemperatureData] = useState<ITemperature[]>([]);
 
   useEffect(() => {
     const fetchTemperatureData = async () => {
@@ -45,7 +40,7 @@ export const FactoryTemperatures = ({ factory }: { factory: IFactory }) => {
   );
 };
 
-function checkTemperatureAvailability(temperatureData: ITemperatureData[]) : boolean {
+function checkTemperatureAvailability(temperatureData: ITemperature[]) : boolean {
   if (!temperatureData || temperatureData.length === 0) {
     return false;
   }

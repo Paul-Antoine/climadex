@@ -13,3 +13,9 @@ export interface IFactoriesPage {
     factories: IFactory[];
     hasMore: boolean;
 }
+
+export interface ITemperature {
+    year: string; 
+    temperature: number | null;
+}
+  

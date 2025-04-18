@@ -6,11 +6,23 @@ import { IFactory, IFactoriesPage } from '@climadex/types';
 import { FactoryRow } from './FactoryRow';
 import test from 'node:test';
 
-async function fetchFactories(filterString: string, page: number, pageSize: number ): Promise<IFactoriesPage> {
-  const url =
-    filterString === ''
-      ? `http://localhost:3000/factories?page=${page}&pageSize=${pageSize}`
-      : `http://localhost:3000/factories?q=${filterString}&page=${page}&pageSize=${pageSize}`;
+async function fetchFactories(filterString: string, page: number, pageSize: number , risk: IFactory['temperatureRisk']): Promise<IFactoriesPage> {
+  let url = "http://localhost:3000/factories";
+  let sep = '?'; 
+  if (filterString) {
+    url += `${sep}q=${filterString}`;
+    sep = '&';
+  }
+
+  if (page && pageSize) {
+    url += `${sep}page=${page}&pageSize=${pageSize}`;
+    sep = '&';
+  }
+
+  if (risk) {
+    url += `${sep}risk=${risk}`;
+    sep = '&';
+  }
 
   const response = await fetch(url);
   const { factories, hasMore } = await response.json();
@@ -18,7 +30,7 @@ async function fetchFactories(filterString: string, page: number, pageSize: numb
   return { factories, hasMore };
 }
 
-export function FactoriesTable({ filterString }: { filterString: string }) {
+export function FactoriesTable({ filterString, filterRisk }: { filterString: string; filterRisk?: IFactory['temperatureRisk'] }) {
   const [factories, setFactories] = useState<IFactory[]>([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -28,17 +40,17 @@ export function FactoriesTable({ filterString }: { filterString: string }) {
   const loadMoreFactories = useCallback(async () => {
     if (!hasMore) return;
 
-    const { factories: newFactories, hasMore: more } = await fetchFactories(filterString, page, pageSize);
+    const { factories: newFactories, hasMore: more } = await fetchFactories(filterString, page, pageSize, filterRisk || '');
     setFactories((prev) => [...prev, ...newFactories]);
     setHasMore(more);
     setPage((prev) => prev + 1);
-  }, [filterString, page, hasMore]);
+  }, [filterString, page, hasMore, filterRisk]);
 
   useEffect(() => {
     setFactories([]);
     setPage(1);
     setHasMore(true);
-  }, [filterString]);
+  }, [filterString, filterRisk]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(

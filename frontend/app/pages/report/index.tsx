@@ -16,7 +16,6 @@ async function fetchFactoryInfos( factoryId: number ): Promise<IFactory> {
 
 export function ReportPage() {
   const params = useParams();
-  console.log(params);
   const factoryId = params.reportId ? parseInt(params.reportId) : 0;
   const [factory, setFactory] = useState<IFactory>({});
 

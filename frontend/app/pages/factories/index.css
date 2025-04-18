@@ -24,3 +24,18 @@
   text-decoration: none;
 }
 
+.searchFilter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.searchFilter input {
+  padding: 4px;
+  border: 1px solid black;
+}
+.searchFilter input:focus {
+  outline: none;
+}
+.searchFilter input::placeholder {
+  color: #aaa;
+}
